@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thick Ascending Limb: Solute Transport</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:#c9d4c8;font-family:Verdana,"DejaVu Sans",sans-serif;color:#1d2a1d}
+#wrap{max-width:1200px;margin:0 auto;padding:12px 12px 28px}
+#bar,#bar2{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 10px;align-items:center}
+#bar span,#bar2 span{font-size:13px;color:#4a5a48;margin-right:2px}
+.sb{--c:#555;border:2px solid var(--c);background:rgba(255,255,255,.35);color:#1d2a1d;border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.sb.on{background:var(--c);color:#fff}.sb.g{--c:#6b7a68}
+svg{display:block;width:100%;height:auto;user-select:none}
+#info{margin-top:10px;background:#bcc7b8;border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.5;min-height:74px}
+#bar .sb.dot::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:7px}#bar .sb.dot.on::before{background:#fff}#bar:not(.pon) .sb.dot::before{display:none}
+</style></head><body>
+<div id="wrap"><div id="bar"><span>Solutes:</span></div>
+<svg id="fig" viewBox="0 0 1300 800" xmlns="http://www.w3.org/2000/svg" font-family="Verdana,'DejaVu Sans',sans-serif">
+<defs id="defs">
+<clipPath id="pc"><rect x="30" y="60" width="1240" height="730" rx="18"/></clipPath>
+<pattern id="hp" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#e0a58f"/><rect width="5" height="10" fill="#b8553a"/></pattern>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10Z" fill="#111"/></marker>
+</defs>
+<rect width="1300" height="800" fill="#c9d4c8"/>
+<text x="650" y="34" font-size="24" font-weight="bold" text-anchor="middle" fill="#111">THICK ASCENDING LIMB</text>
+<g clip-path="url(#pc)"><rect x="30" y="60" width="260" height="730" fill="#d4d4d4"/></g>
+<path d="M1115,172 L1115,770 A70,24 0 0 0 1255,770 L1255,172 Z" fill="#ffcccc"/><ellipse cx="1185" cy="172" rx="70" ry="24" fill="#ffe3e3"/>
+<rect x="290" y="125" width="590" height="440" rx="40" fill="#cfdae8" stroke="#7d9bc4" stroke-width="7"/>
+<rect x="290" y="625" width="590" height="200" rx="40" fill="#cfdae8" stroke="#7d9bc4" stroke-width="7"/>
+<rect x="405" y="558" width="46" height="70" fill="url(#hp)" stroke="#8a4a38" stroke-width="2"/>
+<path d="M160 215 L205 265 L180 265 L180 335 L140 335 L140 265 L115 265Z" fill="#f6e4a8"/>
+<text x="585" y="100" font-size="20" text-anchor="middle" fill="#111">Cell of the thick ascending limb</text>
+<text x="48" y="92" font-size="20" font-weight="bold" fill="#111">Lumen</text><text x="1252" y="92" font-size="20" font-weight="bold" text-anchor="end" fill="#111">Blood</text>
+<g fill="#fff" stroke="#8a8a8a" stroke-width="2"><rect x="48" y="104" width="86" height="32" rx="3"/><rect x="1168" y="104" width="84" height="32" rx="3"/></g>
+<g font-size="19" fill="#111" text-anchor="middle" dominant-baseline="central"><text id="mv" x="91" y="121"></text><text x="1210" y="121">0 mV</text></g>
+<g id="dyn"></g><g id="ptc"></g><text id="fl" x="160" y="121" font-size="15" fill="#33404c" dominant-baseline="central">Fluid flow ↑</text><g id="fx"></g></svg>
+<div id="bar2" style="margin:10px 0 0"><span>Drugs and disease:</span></div>
+<div id="info"></div></div>
+<script>
+const $=s=>document.querySelector(s);
+const TK={Na:['Na⁺','#8d8a1b'],K:['K⁺','#d62d20'],Cl:['Cl⁻','#2e7d4f'],Ca:['Ca²⁺, Mg²⁺','#7a5a3a'],H2O:['H₂O','#2b6fd6']};
+const SH={Na:'Na⁺',K:'K⁺',Cl:'Cl⁻',Ca:'Ca²⁺/Mg²⁺'};
+const INFO={Na:'<b>Na⁺</b> enters the cell on NKCC2 together with K⁺ and 2 Cl⁻ (secondary active transport), then the Na⁺–K⁺ ATPase pumps it out to the blood. Some Na⁺ also moves between the cells, pushed by the +7 mV lumen potential.',
+K:'<b>K⁺</b> enters on NKCC2, but most of it leaks straight back into the lumen through ROMK1 (the dotted loop). That recycling keeps enough K⁺ in the lumen for NKCC2 to work and helps create the +7 mV lumen potential. The rest leaves across the blood side (KCC4) or passes between cells.',
+Cl:'<b>Cl⁻</b> enters on NKCC2 (two per cycle) and leaves across the blood-side membrane through a Cl⁻ channel (ClC-Kb). Because K⁺ leaks back into the lumen while Cl⁻ leaves toward the blood, the lumen becomes positive.',
+Ca:'<b>Ca²⁺ and Mg²⁺</b> are reabsorbed between the cells through claudin 16 (dashed arrow), pulled by the +7 mV lumen potential. A Ca²⁺-sensing receptor (CaSR) on the blood side detects high blood Ca²⁺ and turns down ROMK1 and NKCC2, which lowers the potential and sends more Ca²⁺ and Mg²⁺ into the urine.',
+H2O:'<b>Water</b> cannot cross this segment. The thick ascending limb has no water channels, so NaCl is removed but water stays behind. The tubular fluid becomes dilute, which is why this is called the diluting segment.',
+FUR:'<b>Furosemide</b> blocks the Cl⁻ site of NKCC2 from the lumen side. Na⁺, K⁺ and Cl⁻ stay in the lumen, K⁺ recycling stops, and the lumen potential falls toward 0 mV. Ca²⁺ and Mg²⁺ are lost as well, and the result is a strong diuresis.',
+CASR:'<b>High blood Ca²⁺</b> activates the CaSR, which inhibits ROMK1 and NKCC2. Less K⁺ recycles, the lumen potential falls, and paracellular Ca²⁺ and Mg²⁺ reabsorption drops (calciuria).',
+BAR:'<b>Bartter syndrome</b> is caused by a loss-of-function mutation in NKCC2, ROMK1 or the Cl⁻ channel (ClC-Kb). Salt entry and K⁺ recycling fail, so it behaves like a permanent furosemide effect: the lumen potential falls, NaCl, Ca²⁺ and Mg²⁺ are lost, and more Na⁺ reaches the collecting duct. This causes salt wasting, hypokalemia, metabolic alkalosis and hypercalciuria.',
+CLDN:'<b>Claudin 16 loss</b> (familial hypomagnesemia with hypercalciuria and nephrocalcinosis) removes the paracellular route for Ca²⁺ and Mg²⁺. The potential is normal, but these ions cannot cross and are lost in the urine.'};
+const DEF='Select solutes to follow their routes; others fade. Turn on Moving solutes to watch Na⁺ (olive), Cl⁻ (green), K⁺ (red) and Ca²⁺/Mg²⁺ (brown) rise up the lumen and cross through transporters or between cells. Try furosemide, high blood Ca²⁺ and claudin 16 loss.';
+const SP=[['s0','#f4d8db','#d58f98'],['s1','#e2f2f4','#5fb0bd'],['s2','#dcd6ef','#8f84bb'],['s3','#e4f3de','#8fc486'],['s4','#f7e3c6','#d9a468']];
+$('#defs').insertAdjacentHTML('beforeend',SP.map(([i,a,b])=>`<radialGradient id="${i}" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`).join(''));
+const arrow=(x1,y,x2)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#111" stroke-width="2.4" marker-end="url(#ah)"/>`;
+const txt=(t,x,y,s=20)=>`<text x="${x}" y="${y}" font-size="${s}" fill="#111" dominant-baseline="central">${t}</text>`;
+const el=(k,i)=>`<g class="el" data-k="${k}">${i}</g>`;
+const lab=(t,c='#1d2a1d')=>t?`<text y="1" font-size="15" font-weight="bold" fill="${c}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${t}</text>`:'';
+const tp=(k,x,y,f,n,l,c)=>`<g class="el tp" data-k="${k}" data-x="${x}" data-y="${y}" transform="translate(${x},${y})"><title>${n}</title><circle r="34" fill="url(#${f})" stroke="#555" stroke-opacity=".5" stroke-width="2"/>${lab(l,c)}</g>`;
+const X=(x,y)=>`<line x1="${x-16}" y1="${y-16}" x2="${x+16}" y2="${y+16}" stroke="#c0281f" stroke-width="5"/><line x1="${x+16}" y1="${y-16}" x2="${x-16}" y2="${y+16}" stroke="#c0281f" stroke-width="5"/>`;
+const NT=(t,x,y)=>`<text x="${x}" y="${y}" font-size="15" font-weight="bold" fill="#c0281f" dominant-baseline="central">${t}</text>`;
+let h='';
+h+=el('Na',arrow(225,266,355)+txt('Na⁺',366,266))+el('Cl',arrow(225,306,355)+txt('2Cl⁻',366,306))+el('K',arrow(225,346,355)+txt('K⁺',366,346));
+h+=el('K',arrow(355,430,225)+txt('K⁺',366,430));
+h+=el('Na',arrow(815,189,945)+txt('Na⁺',957,189))+el('K',arrow(945,241,815)+txt('K⁺',957,241));
+h+=el('Cl',arrow(815,330,945)+txt('Cl⁻',957,330))+el('K',arrow(815,420,945)+txt('K⁺',957,420));
+h+=el('Na K Ca',`<rect x="40" y="535" width="100" height="120" fill="#fff6d8" stroke="#a8956a" stroke-width="2"/><g font-size="19" fill="#111" text-anchor="middle"><text x="90" y="565">Na⁺</text><text x="90" y="593">K⁺</text><text x="90" y="621">Ca²⁺</text><text x="90" y="649">Mg²⁺</text></g><path d="M150 600 L1090 600" stroke="#111" stroke-width="2.4" stroke-dasharray="8 6" fill="none" marker-end="url(#ah)"/><text x="560" y="582" font-size="18" font-weight="bold" fill="#111">Claudin 16</text>`);
+h+=el('H2O','<text x="48" y="725" font-size="26" font-weight="bold" fill="#2b6fd6" dominant-baseline="central">H₂O</text>'+arrow(130,725,248)+X(268,725)+txt('Impermeable to water',48,765,15));
+h+=tp('Na Cl K',290,306,'s0','Na⁺–K⁺–2Cl⁻ cotransporter (NKCC2)','NKCC2')+tp('K',290,430,'s1','ROMK1 K⁺ channel','ROMK1');
+h+=tp('Na K',880,215,'s3','Na⁺–K⁺ ATPase','ATP','#2a4a9a')+tp('Cl',880,330,'s2','Cl⁻ channel (ClC-Kb)','ClC-Kb')+tp('K',880,420,'s2','KCC4 cotransporter','KCC4')+tp('Ca',880,520,'s4','Ca²⁺-sensing receptor (CaSR)','CaSR')+el('Ca',txt('Senses blood Ca²⁺',925,520,15));
+const FL=[['Na',150,266,430],['Cl',150,306,430],['K',150,346,430],['K',430,430,150],['Na',780,189,1060],['K',1060,241,780],['Cl',780,330,1060],['K',780,420,1060],['Na',150,600,1060,0],['K',150,600,1060,.17],['Ca',150,600,1060,.33]];
+FL.forEach((f,i)=>{[0,.5].forEach(p=>{const l=SH[f[0]],w=Math.max(42,l.length*10+18);h+=`<g class="tk" data-f="${i}" data-p="${p+(f[4]||0)}" style="display:none"><rect x="${-w/2}" y="-13" width="${w}" height="26" rx="13" fill="${TK[f[0]][1]}"/><text font-size="15" font-weight="bold" fill="#fff" text-anchor="middle" dominant-baseline="central">${l}</text></g>`})});
+$('#dyn').innerHTML=h;
+$('#fx').innerHTML=`<g class="fx" data-k="FUR" style="display:none">${X(290,306)}${NT('Furosemide blocks NKCC2',40,160)}${NT('Lumen potential falls toward 0 mV',40,180)}</g><g class="fx" data-k="CASR" style="display:none">${X(290,306)}${X(290,430)}${NT('High Ca²⁺: CaSR inhibits NKCC2 and ROMK1',40,160)}${NT('Less recycling, lower potential',40,180)}</g><g class="fx" data-k="BAR" style="display:none">${X(290,306)}${X(290,430)}${X(880,330)}${NT('Bartter: NKCC2, ROMK1 or ClC-Kb defective',40,160)}${NT('Salt wasting, low potential, Ca²⁺ lost',40,180)}</g><g class="fx" data-k="CLDN" style="display:none">${X(428,593)}${NT('Claudin 16 lost: Ca²⁺ and Mg²⁺ stay in lumen',40,160)}</g>`;
+const act=new Set();let last=null;const bar=$('#bar');
+const FX={FUR:['Furosemide','#a0302a'],CASR:['High blood Ca²⁺ (CaSR)','#5a6b7d'],CLDN:['Claudin 16 loss','#7a3b8c'],BAR:['Bartter syndrome','#2f6f5e']};
+const mk=(par,k,name,col)=>{const b=document.createElement('button');b.className='sb';b.dataset.k=k;b.style.setProperty('--c',col);b.textContent=name;b.onclick=()=>{if(act.has(k))act.delete(k);else{act.add(k);last=k}if(!act.has(last))last=[...act].pop()||null;upd()};par.appendChild(b)};
+Object.keys(TK).forEach(k=>mk(bar,k,TK[k][0],TK[k][1]));
+['Na','K','Cl','Ca'].forEach(k=>bar.querySelector(`[data-k="${k}"]`).classList.add('dot'));
+Object.keys(FX).forEach(k=>mk($('#bar2'),k,FX[k][0],FX[k][1]));
+[['All',()=>{Object.keys(TK).forEach(k=>act.add(k));last='Na'}],['Clear',()=>{act.clear();last=null}]].forEach(([n,f])=>{const b=document.createElement('button');b.className='sb g';b.textContent=n;b.onclick=()=>{f();upd()};bar.appendChild(b)});
+function upd(){$('#mv').textContent='+'+(act.has('FUR')?1:act.has('BAR')?2:act.has('CASR')?3:7)+' mV';
+const any=[...act].some(k=>TK[k]);document.querySelectorAll('.fx').forEach(e=>{e.style.display=act.has(e.dataset.k)?'':'none'});
+document.querySelectorAll('.el').forEach(e=>{const m=e.dataset.k.split(' ').some(k=>act.has(k));e.setAttribute('opacity',any&&!m?.28:1)});
+document.querySelectorAll('.sb[data-k]').forEach(b=>b.classList.toggle('on',act.has(b.dataset.k)));
+$('#info').innerHTML=last?INFO[last]+(act.size>1?`<br><span style="font-size:13px;opacity:.75">Showing ${act.size} items; the text describes the one you picked last.</span>`:''):DEF}
+const PC={Na:'#8d8a1b',Cl:'#2e7d4f',K:'#d62d20',Ca:'#7a5a3a'},PN={Na:'Na⁺',Cl:'Cl⁻',K:'K⁺',Ca:'Ca²⁺ or Mg²⁺'},PG=$('#ptc'),PT=[];
+const LY={nNa:266,nCl:306,nK:346,rk:346,pa:600};
+const RTE={nNa:[[290,266],[800,266],[800,189],[945,189],[1150,189]],nCl:[[290,306],[800,330],[1150,330]],nK:[[290,346],[800,420],[1150,420]],rk:[[290,346],[540,346],[540,430],[290,430],[240,430]],pa:[[290,600],[1150,600]]};
+function prob(p){if(p.rt==='pa'){let b=.8;if(act.has('FUR'))b=.2;else if(act.has('BAR'))b=.3;else if(act.has('CASR'))b=.5;if(act.has('CLDN')&&p.kind==='Ca')b=.05;return b}
+let b=.85;if(act.has('FUR'))b=.05;else if(act.has('BAR'))b=.1;else if(act.has('CASR'))b=.45;return b}
+function mkP(pre){const u=Math.random(),kind=u<.35?'Na':u<.65?'Cl':u<.85?'K':'Ca',v=Math.random();
+const rt=kind==='Ca'?'pa':kind==='Na'?(v<.35?'pa':'nNa'):kind==='Cl'?'nCl':(v<.3?'pa':'nK'),ly=LY[rt];
+const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML=`<title>${PN[kind]}</title><circle r="10" fill="${PC[kind]}" stroke="#fff" stroke-width="2"/>`;PG.appendChild(g);
+PT.push({kind,rt,ly,x:50+Math.random()*210,y:pre?ly+40+Math.random()*(770-ly-40):780,vy:36+Math.random()*14,ph:Math.random()*6.3,st:'drift',a:pre?1:0,fade:1,g})}
+let showP=false;
+function stepP(t,dt){PG.style.display=showP?'':'none';$('#fl').style.display=showP?'':'none';if(!showP)return;
+if(PT.length<60&&t-(stepP.s||0)>.45){stepP.s=t;mkP(0)}
+const any=Object.keys(TK).some(k=>act.has(k));
+for(let i=PT.length-1;i>=0;i--){const p=PT[i];p.a=Math.min(1,p.a+dt*2);
+if(p.st==='drift'){p.y-=p.vy*dt;p.x=Math.min(262,Math.max(48,p.x+Math.sin(t*1.7+p.ph)*12*dt));if(!p.passed&&p.y<=p.ly+70)p.st='appr';p.fade=Math.max(0,Math.min(1,(p.y-130)/40))}
+else if(p.st==='appr'){const dx=252-p.x,dy=p.ly-p.y,d=Math.hypot(dx,dy);if(d<4){if(Math.random()<prob(p)){p.back=p.rt==='nK'&&Math.random()<(act.has('BAR')?.2:act.has('CASR')?.35:.7);p.wp=RTE[p.back?'rk':p.rt].map(a=>a.slice());p.st='path'}else{p.passed=true;p.st='drift'}}else{const s=Math.min(d,95*dt);p.x+=dx/d*s;p.y+=dy/d*s}}
+else if(p.st==='path'){const w=p.wp[0],dx=w[0]-p.x,dy=w[1]-p.y,d=Math.hypot(dx,dy),s=150*dt;if(d<=s){p.x=w[0];p.y=w[1];p.wp.shift();if(!p.wp.length){if(p.back){p.st='drift';p.passed=true}else p.st='cap'}}else{p.x+=dx/d*s;p.y+=dy/d*s}}
+else{p.y+=40*dt;p.fade-=dt*.9}
+if((p.st==='drift'&&p.y<125)||p.fade<=0){p.g.remove();PT.splice(i,1);continue}
+const on=act.has(p.kind);p.g.setAttribute('opacity',(p.a*p.fade*(any&&!on?.28:1)).toFixed(2));
+p.g.setAttribute('transform',`translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) scale(${on?1.3:1})`)}}
+{const b=document.createElement('button');b.className='sb g';b.textContent='Moving solutes';b.onclick=()=>{showP=!showP;b.classList.toggle('on',showP);bar.classList.toggle('pon',showP)};bar.appendChild(b)}
+for(let i=0;i<24;i++)mkP(1);
+const tps=[...document.querySelectorAll('.tp')],tks=[...document.querySelectorAll('.tk')];
+let pt=0;function loop(ts){const t=ts/1000,dt=Math.min(.05,t-(pt||t));pt=t;stepP(t,dt);
+tks.forEach(k=>{const f=FL[k.dataset.f],on=act.has(f[0]);k.style.display=on?'':'none';if(on){const u=(t/2.6+ +k.dataset.p)%1;k.setAttribute('transform',`translate(${f[1]+(f[3]-f[1])*u},${f[2]})`);k.setAttribute('opacity',Math.sin(Math.PI*u).toFixed(2))}});
+tps.forEach(p=>{const on=p.dataset.k.split(' ').some(k=>act.has(k)),s=on?1+.09*Math.sin(t*4):1;p.setAttribute('transform',`translate(${p.dataset.x},${p.dataset.y}) scale(${s.toFixed(3)})`)});
+requestAnimationFrame(loop)}
+upd();requestAnimationFrame(loop);
+</script></body></html>
